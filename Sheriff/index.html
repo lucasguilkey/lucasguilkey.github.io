@@ -7,7 +7,11 @@
   crossorigin=""/>
 
 	<style>
-		#mapid{ height: 600px; }
+		#mapid{ height: 600px; 
+				width: 600px;
+				display: block;
+  				margin-left: auto;
+  				margin-right: auto;}
     /* custom css styles will go here */
 			h2{
 				text-align: center;
@@ -33,10 +37,10 @@
 </head>
 <body>
 	<h2>2018 Alameda County Sheriff Election</h2>
-	<div id="mapid"></div>
+	<div class=mx-auto id="mapid"></div>
 	<div>
 		<p>Alameda County Sheriff Gregory Ahern was appointed to the position of sheriff in 2006 and has run unopposed in every election since then. Even though his department faces much controversy in the media--collaboration with ICE, criminal charges against his deputies for eavesdropping and assault, lawsuits for sexism, miscarriages, and a woman forced to give birth alone in a solitary cell--he continues to win in landslides. The darker the red, the higher percentage of the vote he received in 2018. Several precincts are missing.</p>
-		<p>Source: Alameda County Registrar of Voters 2018</p></P>
+		<p>Source: Alameda County Registrar of Voters 2018</p>
 	</div>
 	
 	<script src="https://d3js.org/d3.v5.min.js"></script>
@@ -49,7 +53,7 @@
 	<script>
 		
 		//add from leaflet quickstart, set long, lat, and zoom
-		var mymap = L.map('mapid').setView([37.648081, -121.913304], 10);
+		var mymap = L.map('mapid').setView([37.653078, -122.115310], 10);
 		
 		//add base map
 		var CartoDB_PositronNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
