@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+  integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+  crossorigin=""/>
+
+	<style>
+		#mapid{ height: 600px; }
+    /* custom css styles will go here */
+			h2{
+				text-align: center;
+				font-family: 'Montserrat', sans-serif;
+				font-size: 40px;
+			}
+/*
+			svg{
+				margin-left: auto;
+				margin-right: auto;
+				display: block;
+			}
+*/
+			p{
+/*				text-align: center;*/
+/*				only use this if very few lines; very confusing if multiple lines centered*/
+				max-width: 500px;
+				margin-left: auto;
+				margin-right: auto;
+				font-family: 'Montserrat', sans-serif;
+			}
+	</style>
+</head>
+<body>
+	<h2>2018 Alameda County Sheriff Election</h2>
+	<div id="mapid"></div>
+	<div>
+		<p>Alameda County Sheriff Gregory Ahern was appointed to the position of sheriff in 2006 and has run unopposed in every election since then. Even though his department faces much controversy in the media--collaboration with ICE, criminal charges against his deputies for eavesdropping and assault, lawsuits for sexism, miscarriages, and a woman forced to give birth alone in a solitary cell--he continues to win in landslides. The darker the red, the higher percentage of the vote he received in 2018. Several precincts are missing.</p>
+		<p>Source: Alameda County Registrar of Voters 2018</p></P>
+	</div>
+	
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script
+	src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+  integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+  crossorigin="">
+	</script>
+	
+	<script>
+		
+		//add from leaflet quickstart, set long, lat, and zoom
+		var mymap = L.map('mapid').setView([37.648081, -121.913304], 10);
+		
+		//add base map
+		var CartoDB_PositronNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 19
+		}).addTo(mymap); //changed map to my map at the end here
+				//the first part of this chunk is copy and pasted from leaflet basemaps
+		
+		//d3 PROMISE.ALL function - JOIN
+		Promise.all([							//must be an array with brackets
+			d3.json("Alameda-County-Voter-Precincts.geojson"),
+			d3.csv("alco-2018primary-sheriff.csv")
+		])
+		.then(function(data){				//waiting until the above is all loaded in, open up curly brackets for eveything below
+			
+			  //console.log(data[1]);  //CHECK DATA
+				console.log(data[0]);		//CHECK SHAPEFILE
+		
+                    //d3 color scales from website
+                    var colorScale=d3.scaleSequential(d3.interpolateRdBu)
+                            .domain([538,-538])				//set zero to max of data
+                                            //can also do difference; newsom minus cox
+
+                    //d3 mapping; non cartographic map -- allows you to associate data with certain variables (set NAME with DATA...so later we can **get** DATA for NAME)
+                    var my_map=d3.map(); 
+
+                    //function to all color/style to map
+                    data[1].forEach(function(d){			//[1] is ****csv*****
+
+                        my_map.set(d.Precinct, {
+													color       : colorScale(d["Ahern Difference"]), 
+													difference : d["Ahern Difference"]
+												})
+
+												//console.log(d.Precinct,d["Ahern Difference"], colorScale(d["Ahern Difference"]));		//CHECK MAPPING THE DATA
+                    })
+
+			
+                    //LEAFLET: add from leaflet documentation-->***GeoJSON*** (which goes inside the above promise.all/then function)
+                    L.geoJSON(data[0], {					//added in [0] for geojson
+                        style: function (feature) {
+
+                                    //console.log(feature.properties);		
+                                                    //seeing what data looks like
+                                    //console.log(feature.properties);	
+                                                    //seeing what feature look like
+																		//console.log(feature); //CHECKING SHAPEFILE
+													
+																		if(typeof my_map.get(feature.properties.precinct)=="undefined"){
+																			return{
+																				fillOpacity: 0,
+																				stroke: false,
+																				weight: 0.5,
+																				color: "#000"
+																			}
+																		}
+
+														return {
+																		fillColor: my_map.get(feature.properties.precinct).color,
+																		stroke: true,
+																		weight: 0.5,
+																		color: "#000",
+																		fillOpacity: 0.5
+
+
+																	 };			//edited from orginal code using d3 mapping from above// getting the color
+																	//stroke width
+																	//stroke color
+																	//fill color
+
+                				}
+                    }).bindPopup(function (layer) {
+											console.log(my_map.get(layer.feature.properties.precinct).difference);
+                			//return my_map.get(layer.feature.properties.precint);
+											return "Votes: " + my_map.get(layer.feature.properties.precinct).difference;
+                    }).addTo(mymap);				//changed map to mymap
+                    })
+		
+	</script>
+</body>
+</html>
