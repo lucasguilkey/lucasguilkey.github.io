@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blank Template</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+	p{
+/*				text-align: center;*/
+/*				only use this if very few lines; very confusing if multiple lines centered*/
+				max-width: 500px;
+				margin-left: auto;
+				margin-right: auto;
+				font-family: 'Montserrat', sans-serif;
+			}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+	</div>
+	<p>This chart shows how many people locked up at Santa Rita jail were seen by a nurse or doctor each month from January 2012 to June 2018. The major drop off in October of 2014 raises many questions--including whether this is a reporting error or a drastic drop in service. </p>
+	<p>Source: Board of State and Community Corrections Jail Profile Survey</p>
+
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script type="text/javascript">
+  jQuery(document).ready(function($) {
+    	var margin = {top:80, right:60, bottom:20, left:60},
+					width  = 800 - margin.left - margin.right,
+					height = 500 - margin.top  - margin.bottom;  //these are all "var"s writing var a bunch of times
+		
+//			var svg = d3.select(".container")
+//					.append("svg")
+//					.attr("width",  width + margin.left + margin.right)
+//					.attr("height", height + margin.top + margin.bottom);
+		
+				var svg = d3.select(".container")		//now we're going to make it responsive
+						.append("svg")
+						.attr("width", "100%")
+						.attr("height", "100%")
+						.attr("viewBox", "0 0 " + 
+									(width + margin.left + margin.right) + 
+									" " + 
+									(height + margin.top + margin.bottom) 
+								 );
+		
+			var data = [
+					{Date:"Jan-02",SickCall:11898},
+					{Date:"Feb-02",SickCall:11512},
+					{Date:"Mar-02",SickCall:12544},
+					{Date:"Apr-02",SickCall:13560},
+					{Date:"May-02",SickCall:13803},
+					{Date:"Jun-02",SickCall:16168},
+					{Date:"Jul-02",SickCall:14984},
+					{Date:"Aug-02",SickCall:15680},
+					{Date:"Sep-02",SickCall:16123},
+					{Date:"Oct-02",SickCall:18192},
+					{Date:"Nov-02",SickCall:12079},
+					{Date:"Dec-02",SickCall:14403},
+					{Date:"Jan-03",SickCall:15434},
+					{Date:"Feb-03",SickCall:13932},
+					{Date:"Mar-03",SickCall:14798},
+					{Date:"Apr-03",SickCall:15847},
+					{Date:"May-03",SickCall:15361},
+					{Date:"Jun-03",SickCall:15116},
+					{Date:"Jul-03",SickCall:15686},
+					{Date:"Aug-03",SickCall:16256},
+					{Date:"Sep-03",SickCall:15828},
+					{Date:"Oct-03",SickCall:14504},
+					{Date:"Nov-03",SickCall:14504},
+					{Date:"Dec-03",SickCall:14353},
+					{Date:"Jan-04",SickCall:14566},
+					{Date:"Feb-04",SickCall:14063},
+					{Date:"Mar-04",SickCall:15637},
+					{Date:"Apr-04",SickCall:14902},
+					{Date:"May-04",SickCall:14668},
+					{Date:"Jun-04",SickCall:15069},
+					{Date:"Jul-04",SickCall:14902},
+					{Date:"Aug-04",SickCall:14668},
+					{Date:"Sep-04",SickCall:15069},
+					{Date:"Oct-04",SickCall:14763},
+					{Date:"Nov-04",SickCall:13920},
+					{Date:"Dec-04",SickCall:14283},
+					{Date:"Jan-05",SickCall:14272},
+					{Date:"Feb-05",SickCall:13844},
+					{Date:"Mar-05",SickCall:15237},
+					{Date:"Apr-05",SickCall:14250},
+					{Date:"May-05",SickCall:15023},
+					{Date:"Jun-05",SickCall:14511},
+					{Date:"Jul-05",SickCall:14213},
+					{Date:"Aug-05",SickCall:14922},
+					{Date:"Sep-05",SickCall:14864},
+					{Date:"Oct-05",SickCall:14721},
+					{Date:"Nov-05",SickCall:14801},
+					{Date:"Dec-05",SickCall:14850},
+					{Date:"Jan-06",SickCall:14563},
+					{Date:"Feb-06",SickCall:13885},
+					{Date:"Mar-06",SickCall:15649},
+					{Date:"Apr-06",SickCall:14281},
+					{Date:"May-06",SickCall:11145},
+					{Date:"Jun-06",SickCall:9202},
+					{Date:"Jul-06",SickCall:10589},
+					{Date:"Aug-06",SickCall:13170},
+					{Date:"Sep-06",SickCall:8963},
+					{Date:"Oct-06",SickCall:12845},
+					{Date:"Nov-06",SickCall:12430},
+					{Date:"Dec-06",SickCall:12546},
+					{Date:"Jan-07",SickCall:13045},
+					{Date:"Feb-07",SickCall:11401},
+					{Date:"Mar-07",SickCall:17638},
+					{Date:"Apr-07",SickCall:16771},
+					{Date:"May-07",SickCall:16802},
+					{Date:"Jun-07",SickCall:21608},
+					{Date:"Jul-07",SickCall:18534},
+					{Date:"Aug-07",SickCall:16505},
+					{Date:"Sep-07",SickCall:18919},
+					{Date:"Oct-07",SickCall:21748},
+					{Date:"Nov-07",SickCall:19417},
+					{Date:"Dec-07",SickCall:20845},
+					{Date:"Jan-08",SickCall:11085},
+					{Date:"Feb-08",SickCall:12099},
+					{Date:"Mar-08",SickCall:16442},
+					{Date:"Apr-08",SickCall:14749},
+					{Date:"May-08",SickCall:13714},
+					{Date:"Jun-08",SickCall:13659},
+					{Date:"Jul-08",SickCall:17087},
+					{Date:"Aug-08",SickCall:18900},
+					{Date:"Sep-08",SickCall:16342},
+					{Date:"Oct-08",SickCall:16443},
+					{Date:"Nov-08",SickCall:16609},
+					{Date:"Dec-08",SickCall:16269},
+					{Date:"Jan-09",SickCall:15323},
+					{Date:"Feb-09",SickCall:14047},
+					{Date:"Mar-09",SickCall:16228},
+					{Date:"Apr-09",SickCall:13949},
+					{Date:"May-09",SickCall:14733},
+					{Date:"Jun-09",SickCall:11157},
+					{Date:"Jul-09",SickCall:12397},
+					{Date:"Aug-09",SickCall:12318},
+					{Date:"Sep-09",SickCall:12260},
+					{Date:"Oct-09",SickCall:12242},
+					{Date:"Nov-09",SickCall:12690},
+					{Date:"Dec-09",SickCall:14593},
+					{Date:"Jan-10",SickCall:14879},
+					{Date:"Feb-10",SickCall:14321},
+					{Date:"Mar-10",SickCall:13426},
+					{Date:"Apr-10",SickCall:14949},
+					{Date:"May-10",SickCall:16030},
+					{Date:"Jun-10",SickCall:14063},
+					{Date:"Jul-10",SickCall:12453},
+					{Date:"Aug-10",SickCall:15933},
+					{Date:"Sep-10",SickCall:14585},
+					{Date:"Oct-10",SickCall:14428},
+					{Date:"Nov-10",SickCall:14791},
+					{Date:"Dec-10",SickCall:14621},
+					{Date:"Jan-11",SickCall:14782},
+					{Date:"Feb-11",SickCall:14581},
+					{Date:"Mar-11",SickCall:14092},
+					{Date:"Apr-11",SickCall:15791},
+					{Date:"May-11",SickCall:15678},
+					{Date:"Jun-11",SickCall:15708},
+					{Date:"Jul-11",SickCall:15642},
+					{Date:"Aug-11",SickCall:15799},
+					{Date:"Sep-11",SickCall:15681},
+					{Date:"Oct-11",SickCall:15728},
+					{Date:"Nov-11",SickCall:15681},
+					{Date:"Dec-11",SickCall:15720},
+					{Date:"Jan-12",SickCall:15827},
+					{Date:"Feb-12",SickCall:15687},
+					{Date:"Mar-12",SickCall:15794},
+					{Date:"Apr-12",SickCall:14976},
+					{Date:"May-12",SickCall:15217},
+					{Date:"Jun-12",SickCall:14966},
+					{Date:"Jul-12",SickCall:15010},
+					{Date:"Aug-12",SickCall:14989},
+					{Date:"Sep-12",SickCall:14887},
+					{Date:"Oct-12",SickCall:14810},
+					{Date:"Nov-12",SickCall:14687},
+					{Date:"Dec-12",SickCall:14749},
+					{Date:"Jan-13",SickCall:14876},
+					{Date:"Feb-13",SickCall:14963},
+					{Date:"Mar-13",SickCall:14877},
+					{Date:"Apr-13",SickCall:14794},
+					{Date:"May-13",SickCall:14843},
+					{Date:"Jun-13",SickCall:14877},
+					{Date:"Jul-13",SickCall:15009},
+					{Date:"Aug-13",SickCall:14890},
+					{Date:"Sep-13",SickCall:14747},
+					{Date:"Oct-13",SickCall:14907},
+					{Date:"Nov-13",SickCall:14943},
+					{Date:"Dec-13",SickCall:15028},
+					{Date:"Jan-14",SickCall:15111},
+					{Date:"Feb-14",SickCall:14946},
+					{Date:"Mar-14",SickCall:15101},
+					{Date:"Apr-14",SickCall:15147},
+					{Date:"May-14",SickCall:14991},
+					{Date:"Jun-14",SickCall:14976},
+					{Date:"Jul-14",SickCall:14910},
+					{Date:"Aug-14",SickCall:14628},
+					{Date:"Sep-14",SickCall:13950},
+					{Date:"Oct-14",SickCall:1344},
+					{Date:"Nov-14",SickCall:1398},
+					{Date:"Dec-14",SickCall:1520},
+					{Date:"Jan-15",SickCall:1451},
+					{Date:"Feb-15",SickCall:1507},
+					{Date:"Mar-15",SickCall:1468},
+					{Date:"Apr-15",SickCall:1520},
+					{Date:"May-15",SickCall:1603},
+					{Date:"Jun-15",SickCall:1633},
+					{Date:"Jul-15",SickCall:1752},
+					{Date:"Aug-15",SickCall:1788},
+					{Date:"Sep-15",SickCall:1755},
+					{Date:"Oct-15",SickCall:1795},
+					{Date:"Nov-15",SickCall:1810},
+					{Date:"Dec-15",SickCall:1805},
+					{Date:"Jan-16",SickCall:1817},
+					{Date:"Feb-16",SickCall:1840},
+					{Date:"Mar-16",SickCall:1826},
+					{Date:"Apr-16",SickCall:1830},
+					{Date:"May-16",SickCall:1866},
+					{Date:"Jun-16",SickCall:1870},
+					{Date:"Jul-16",SickCall:1835},
+					{Date:"Aug-16",SickCall:1840},
+					{Date:"Sep-16",SickCall:1855},
+					{Date:"Oct-16",SickCall:1867},
+					{Date:"Nov-16",SickCall:1870},
+					{Date:"Dec-16",SickCall:1888},
+					{Date:"Jan-17",SickCall:1879},
+					{Date:"Feb-17",SickCall:1851},
+					{Date:"Mar-17",SickCall:1866},
+					{Date:"Apr-17",SickCall:1881},
+					{Date:"May-17",SickCall:1873},
+					{Date:"Jun-17",SickCall:1921},
+					{Date:"Jul-17",SickCall:1941},
+					{Date:"Aug-17",SickCall:1920},
+					{Date:"Sep-17",SickCall:1906},
+					{Date:"Oct-17",SickCall:1891},
+					{Date:"Nov-17",SickCall:1871},
+					{Date:"Dec-17",SickCall:1887},
+					{Date:"Jan-18",SickCall:1861},
+					{Date:"Feb-18",SickCall:1901},
+					{Date:"Mar-18",SickCall:1895},
+					{Date:"Apr-18",SickCall:1871},
+					{Date:"May-18",SickCall:1910},
+					{Date:"Jun-18",SickCall:1881}
+					];
+
+    var g = svg.append("g")
+				.attr("transform", "translate(" + margin.left + ", " + margin.top + ")") //output is "translate(20,5)"
+				// the plus sign inside the quotes say to caculate the numberical value of that value but to output that number as a string
+		
+		var yScale = d3.scaleLinear()					//some ppl just make their var "y"
+					.range([height, 0])						// height is lowest bar, 0 is tallest bar
+					.domain([0, 25000]);
+//					.domain([2000, d3.max(data)])
+//					.domain([0, d3.max(data,function(d){ return d.value;}) ]);
+//					d3.min
+//					d3.extent --> min and max values (but doesn't work well with bar charts)
+		
+		var xScale = d3.scaleBand()
+					.range([0, width])
+					.domain(["Jan-02","Feb-02","Mar-02","Apr-02","May-02","Jun-02","Jul-02","Aug-02","Sep-02","Oct-02","Nov-02","Dec-02","Jan-03","Feb-03","Mar-03","Apr-03","May-03","Jun-03","Jul-03","Aug-03","Sep-03","Oct-03","Nov-03","Dec-03","Jan-04","Feb-04","Mar-04","Apr-04","May-04","Jun-04","Jul-04","Aug-04","Sep-04","Oct-04","Nov-04","Dec-04","Jan-05","Feb-05","Mar-05","Apr-05","May-05","Jun-05","Jul-05","Aug-05","Sep-05","Oct-05","Nov-05","Dec-05","Jan-06","Feb-06","Mar-06","Apr-06","May-06","Jun-06","Jul-06","Aug-06","Sep-06","Oct-06","Nov-06","Dec-06","Jan-07","Feb-07","Mar-07","Apr-07","May-07","Jun-07","Jul-07","Aug-07","Sep-07","Oct-07","Nov-07","Dec-07","Jan-08","Feb-08","Mar-08","Apr-08","May-08","Jun-08","Jul-08","Aug-08","Sep-08","Oct-08","Nov-08","Dec-08","Jan-09","Feb-09","Mar-09","Apr-09","May-09","Jun-09","Jul-09","Aug-09","Sep-09","Oct-09","Nov-09","Dec-09","Jan-10","Feb-10","Mar-10","Apr-10","May-10","Jun-10","Jul-10","Aug-10","Sep-10","Oct-10","Nov-10","Dec-10","Jan-11","Feb-11","Mar-11","Apr-11","May-11","Jun-11","Jul-11","Aug-11","Sep-11","Oct-11","Nov-11","Dec-11","Jan-12","Feb-12","Mar-12","Apr-12","May-12","Jun-12","Jul-12","Aug-12","Sep-12","Oct-12","Nov-12","Dec-12","Jan-13","Feb-13","Mar-13","Apr-13","May-13","Jun-13","Jul-13","Aug-13","Sep-13","Oct-13","Nov-13","Dec-13","Jan-14","Feb-14","Mar-14","Apr-14","May-14","Jun-14","Jul-14","Aug-14","Sep-14","Oct-14","Nov-14","Dec-14","Jan-15","Feb-15","Mar-15","Apr-15","May-15","Jun-15","Jul-15","Aug-15","Sep-15","Oct-15","Nov-15","Dec-15","Jan-16","Feb-16","Mar-16","Apr-16","May-16","Jun-16","Jul-16","Aug-16","Sep-16","Oct-16","Nov-16","Dec-16","Jan-17","Feb-17","Mar-17","Apr-17","May-17","Jun-17","Jul-17","Aug-17","Sep-17","Oct-17","Nov-17","Dec-17","Jan-18","Feb-18","Mar-18","Apr-18","May-18"])
+					.padding(0.3);									// padding is a percentage of the bar
+
+
+		g.selectAll(".bar")
+					.data(data)
+					.enter()
+					.append("rect")
+					.attr("x", function(d){ return xScale(d.Date);})
+					.attr("y", function(d){ return yScale(d.SickCall);})
+					.attr("width", function(d){ return xScale.bandwidth();}) // width of each bar, a static number // could also be written as "width", xScale.bandwidth()
+					.attr("height", function(d){ return height - yScale(d.SickCall);})
+		
+		svg.append("g")
+					.attr("transform", "translate(" + margin.left + "," + (margin.top + height) + ")")
+					.call(d3.axisBottom(xScale));
+		
+		svg.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+					.call(d3.axisLeft(yScale));
+		
+		svg.append("text")
+					.attr("x", width/2 + margin.left)
+					.attr("y", margin.top - 30)
+					.attr("text-anchor", "middle")
+					.attr("font-size", 22)
+					.attr("font-family", "Arial, sans-serif")
+					.text("Prisoners in Santa Rita jail seen at sick call (medical appointments)")
+	  				
+		
+
+  });
+  </script>
+</body>
+</html>
